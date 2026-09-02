@@ -1,0 +1,35 @@
+{
+  "name": "tachyon-skills",
+  "owner": {
+    "name": "Quantum Box"
+  },
+  "description": "Tachyon agent skills marketplace for Claude Code.",
+  "metadata": {
+    "description": "Tachyon agent skills marketplace for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "tachyon",
+      "source": "./",
+      "description": "Use Tachyon browser, CLI, Linear, Sentry, and Slack notification workflows from Claude Code.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Quantum Box"
+      },
+      "repository": "https://github.com/quantum-box/tachyon-skills",
+      "category": "developer-tools",
+      "tags": [
+        "tachyon",
+        "browser",
+        "cdp",
+        "cloud-apps",
+        "linear",
+        "sentry",
+        "observability",
+        "slack",
+        "notifications",
+        "cli"
+      ]
+    }
+  ]
+}
