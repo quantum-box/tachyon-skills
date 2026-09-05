@@ -11,8 +11,8 @@
     {
       "name": "tachyon",
       "source": "./",
-      "description": "Use Tachyon browser, CLI, Linear, Sentry, and Slack notification workflows from Claude Code.",
-      "version": "0.1.0",
+      "description": "Use Tachyon browser, CLI, Storage, Linear, Sentry, and Slack notification workflows from Claude Code.",
+      "version": "0.1.1",
       "author": {
         "name": "Quantum Box"
       },
@@ -28,7 +28,8 @@
         "observability",
         "slack",
         "notifications",
-        "cli"
+        "cli",
+        "storage"
       ]
     }
   ]

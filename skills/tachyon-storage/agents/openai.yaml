@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tachyon Storage"
+  short_description: "Integrate app uploads with Tachyon Storage"
+  default_prompt: "Use $tachyon-storage to integrate file attachments through Tachyon Storage and verify upload, read, and deletion."

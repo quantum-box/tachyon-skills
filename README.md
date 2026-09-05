@@ -1,6 +1,6 @@
 # Tachyon Skills
 
-Codex and Claude Code plugin for Tachyon agent workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Linear issue management, Sentry issue operations, and Slack notification checks.
+Codex and Claude Code plugin for Tachyon agent workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, and Slack notification checks.
 
 Split out from the private [`quantum-box/agent-packages`](https://github.com/quantum-box/agent-packages) repository's `plugins/tachyon` so it can be distributed publicly without requiring organization credentials.
 
@@ -8,6 +8,7 @@ Split out from the private [`quantum-box/agent-packages`](https://github.com/qua
 
 - `tachyon-browser`: use the Tachyon k3s Cloudflare Mesh remote Chromium CDP gateway with agent-browser, Playwright, Codex, or Claude Code.
 - `tachyon-cli`: inspect Tachyon Cloud Apps, builds, deployments, build logs, auth profiles, and live build status.
+- `tachyon-storage`: integrate file uploads, reads, and deletion through Tachyon Storage; migrate direct R2 access and diagnose storage failures.
 - `tachyon-linear`: manage Linear issues through Tachyon's project-management integration.
 - `tachyon-sentry`: inspect and manage Sentry issues through Tachyon's tenant-scoped operations API.
 - `tachyon-slack-notify`: verify and send Slack notifications through the Tachyon CLI, collect thread replies, and react to them.
@@ -34,7 +35,7 @@ For local development:
 claude --plugin-dir .
 ```
 
-This exposes `/tachyon:tachyon-browser`, `/tachyon:tachyon-cli`, `/tachyon:tachyon-linear`, `/tachyon:tachyon-sentry`, and `/tachyon:tachyon-slack-notify`. It also adds `remote-browser` to the Bash PATH while enabled.
+This exposes `/tachyon:tachyon-browser`, `/tachyon:tachyon-cli`, `/tachyon:tachyon-storage`, `/tachyon:tachyon-linear`, `/tachyon:tachyon-sentry`, and `/tachyon:tachyon-slack-notify`. It also adds `remote-browser` to the Bash PATH while enabled.
 
 ### Codex app
 

@@ -18,6 +18,10 @@ Use this skill when inspecting Tachyon Platform state through the local `tachyon
 - Do not assume the active profile tenant is correct. Use the explicit tenant from the issue, URL, or app metadata when available.
 - If a command refreshes the token, do not mention the token value; it is fine to say the CLI refreshed auth successfully.
 
+## Storage Integration Routing
+
+For file attachments, photo uploads, direct R2 build commands, or R2 authentication failures, read [tachyon-storage](../tachyon-storage/SKILL.md). Check whether the app should use Tachyon Storage before proposing broader Cloudflare token permissions. Keep build success separate from working attachment upload/read.
+
 ## Initial Setup (First-Time Use)
 
 Before running any `compute`/`ops`/`org` command, make sure an auth profile exists:
