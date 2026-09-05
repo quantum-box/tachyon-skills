@@ -1,7 +1,7 @@
 {
   "name": "tachyon",
-  "description": "Tachyon agent workflows for remote browser control, Tachyon CLI operations, Linear issue management, Sentry issue operations, and Slack notification checks.",
-  "version": "0.1.0",
+  "description": "Tachyon agent workflows for remote browser control, Tachyon CLI operations, Storage integration, Linear issue management, Sentry issue operations, and Slack notification checks.",
+  "version": "0.1.1",
   "author": {
     "name": "Quantum Box"
   },
@@ -17,6 +17,7 @@
     "observability",
     "slack",
     "notifications",
-    "cli"
+    "cli",
+    "storage"
   ]
 }
