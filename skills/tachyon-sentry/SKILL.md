@@ -11,7 +11,7 @@ Use the local `tachyon` CLI for Sentry issue operations.
 
 - Use `tachyon ops sentry issues ...`; do not bypass Tachyon with direct Sentry API calls.
 - Pass an explicit `--tenant-id` and `--profile` when known. Do not assume the active profile has the correct tenant.
-- Add `--platform-id` whenever the tenant is reached through a parent platform rather than direct membership. The ops tenant that holds the Sentry token is always in that position, so every command scoped to it needs the flag.
+- Add `--platform-id` only when the tenant is reached through a parent platform rather than direct membership. A tenant you belong to directly needs no platform scope, and there may be no platform ID to supply; the ops tenant that holds the Sentry write token is always in the parent-platform position, so mutations normally do need it.
 - Address an issue by the numeric Sentry issue `id`. The human-readable short ID (for example `MYPROJECT-1A2`) is rejected by `view`, `resolve`, and `assign`.
 - Add `--json` so results can be parsed and summarized accurately.
 - Treat access tokens, auth headers, secret references, DSNs, and credential refresh output as secrets. Never echo them.
@@ -46,10 +46,11 @@ tachyon ops sentry issues list \
   --query 'is:unresolved' \
   --limit 20 \
   --tenant-id <tenant_id_or_alias> \
-  --platform-id <platform_id> \
   --profile <profile> \
   --json
 ```
+
+If the tenant is reached through a parent platform rather than direct membership, add `--platform-id <platform_id>` to the same command. Reads against a directly held tenant do not take the flag.
 
 Use the Sentry project slug directly with `--project`; do not rewrite it into the search query.
 
@@ -66,10 +67,11 @@ Fetch one issue by numeric Sentry issue ID:
 ```bash
 tachyon ops sentry issues view <numeric_issue_id> \
   --tenant-id <tenant_id_or_alias> \
-  --platform-id <platform_id> \
   --profile <profile> \
   --json
 ```
+
+Add `--platform-id <platform_id>` here too when the tenant sits behind a parent platform, and omit it otherwise, exactly as for `list`.
 
 The numeric `id` from `list` is required. Passing a short ID returns `404 NotFoundError: Sentry issue resource was not found`, which looks like a missing issue but only means the identifier was the wrong kind.
 
@@ -109,7 +111,7 @@ Verify the returned `assigned_to` field and report the assignee without exposing
 - Other `401`: refresh or repair the selected Tachyon auth profile; do not request or print raw tokens.
 - `403` on `list` or `view`: verify the tenant's Sentry connection and read scopes.
 - `404 Sentry issue resource was not found` on `view`, `resolve`, or `assign`: almost always a short ID where the numeric `id` was required. Re-run `list` and take `id` from the response before concluding the issue is gone.
-- `404 A tenant-scoped Sentry write token is not configured` on `resolve` or `assign`: the selected tenant has no write token. Scope the command to the ops tenant with `--platform-id`. Do not fall back to another tenant's credentials or a host token.
+- `404 A tenant-scoped Sentry write token is not configured` on `resolve` or `assign`: separate the two cases before acting. If the command was scoped to the tenant whose app produced the error, re-run it against the ops tenant that owns the write token, with `--platform-id`. If it was already scoped to that ops tenant, the token really is absent and no amount of re-scoping will supply it: the tenant's Sentry connection needs a write-capable token configured or reconnected, which is an operator task outside this CLI. Either way, do not fall back to another tenant's credentials or a host token.
 - Other `404`: verify the project slug, tenant, and profile. The backend handles a stale organization slug when the token exposes exactly one organization.
 - Multiple accessible Sentry organizations: reconnect with an explicit organization instead of guessing.
 
