@@ -12,12 +12,12 @@ Use the local `tachyon` CLI for Sentry issue operations.
 - Use `tachyon ops sentry issues ...`; do not bypass Tachyon with direct Sentry API calls.
 - Pass an explicit `--tenant-id` and `--profile` when known. Do not assume the active profile has the correct tenant.
 - Add `--platform-id` only when the tenant is reached through a parent platform rather than direct membership. A tenant you belong to directly needs no platform scope, and there may be no platform ID to supply; the ops tenant that holds the Sentry write token is always in the parent-platform position, so mutations normally do need it.
-- Address an issue by the numeric Sentry issue `id`. The human-readable short ID (for example `MYPROJECT-1A2`) is rejected by `view`, `resolve`, and `assign`.
+- Address an issue by the numeric Sentry issue `id`. CLI 0.6.68 and later against a Tachyon API that supports it also accept the human-readable short ID (for example `MYPROJECT-1A2`); older versions reject it with a 404.
 - Add `--json` so results can be parsed and summarized accurately.
 - Treat access tokens, auth headers, secret references, DSNs, and credential refresh output as secrets. Never echo them.
 - Default to read-only `list` and `view` operations.
-- Run `resolve` or `assign` only when the user explicitly requests the mutation and the issue ID is unambiguous. For assignment, require the exact Sentry user ID, username, or email.
-- Archiving (Sentry's `ignored` state) has no CLI or API surface. Use the Sentry UI or an authorized Sentry MCP connector instead, and say which one you used.
+- Run `resolve`, `unresolve`, `archive`, `assign`, or `unassign` only when the user explicitly requests the mutation and the issue ID is unambiguous. For assignment, require the exact Sentry user ID, username, or email.
+- `archive` (Sentry's `ignored` state), `unresolve` (alias `reopen`), and `unassign` need CLI 0.6.68 or later. On an older CLI, tell the user to run `tachyon self-update` rather than falling back to the Sentry API.
 - Scope a failing mutation correctly with `--platform-id`; never swap in another tenant's credentials, a host token, or a direct Sentry API call to get around the failure.
 
 ## Orientation
@@ -89,7 +89,19 @@ tachyon ops sentry issues resolve <numeric_issue_id> \
 
 Verify the returned status is `resolved`.
 
-Mutations run against the tenant that holds the write-capable Sentry token, which is normally the ops (system) tenant rather than the tenant whose app produced the error. That tenant is reached through a parent platform, so `--platform-id` is mandatory here even when reads succeeded without it. A read-only OAuth connection is not sufficient for mutations.
+Mutations use the tenant's own Sentry connection when that connection was granted `event:write`. Connections authorized before the write scope was requested are read-only; for those, the API falls back to a tenant-scoped operator-managed write token. When neither is available, reconnecting Sentry for the tenant is the fix. Run the mutation against the same tenant whose reads succeeded first, and add `--platform-id` only when that tenant is reached through a parent platform.
+
+## Reopen, Archive, and Unassign
+
+After explicit user confirmation, with the same tenant options as `resolve`:
+
+```bash
+tachyon ops sentry issues unresolve <issue_id> --tenant-id <tenant_id> --profile <profile> --json
+tachyon ops sentry issues archive <issue_id> --tenant-id <tenant_id> --profile <profile> --json
+tachyon ops sentry issues unassign <issue_id> --tenant-id <tenant_id> --profile <profile> --json
+```
+
+Verify the returned status is `unresolved` or `ignored`, or that `assigned_to` is empty. `archive` archives until the issue is manually reopened.
 
 ## Assign an Issue
 
@@ -111,7 +123,8 @@ Verify the returned `assigned_to` field and report the assignee without exposing
 - Other `401`: refresh or repair the selected Tachyon auth profile; do not request or print raw tokens.
 - `403` on `list` or `view`: verify the tenant's Sentry connection and read scopes.
 - `404 Sentry issue resource was not found` on `view`, `resolve`, or `assign`: almost always a short ID where the numeric `id` was required. Re-run `list` and take `id` from the response before concluding the issue is gone.
-- `404 A tenant-scoped Sentry write token is not configured` on `resolve` or `assign`: separate the two cases before acting. If the command was scoped to the tenant whose app produced the error, re-run it against the ops tenant that owns the write token, with `--platform-id`. If it was already scoped to that ops tenant, the token really is absent and no amount of re-scoping will supply it: the tenant's Sentry connection needs a write-capable token configured or reconnected, which is an operator task outside this CLI. Either way, do not fall back to another tenant's credentials or a host token.
+- `404 Sentry write access is not configured for this tenant` on a mutation: the tenant's Sentry connection lacks `event:write` and no write token exists. Ask the user to reconnect Sentry for that tenant, then retry. Do not switch tenants or use a host token.
+- `404 A tenant-scoped Sentry write token is not configured` on `resolve` or `assign` (older API): separate the two cases before acting. If the command was scoped to the tenant whose app produced the error, re-run it against the ops tenant that owns the write token, with `--platform-id`. If it was already scoped to that ops tenant, the token really is absent and no amount of re-scoping will supply it: the tenant's Sentry connection needs a write-capable token configured or reconnected, which is an operator task outside this CLI. Either way, do not fall back to another tenant's credentials or a host token.
 - Other `404`: verify the project slug, tenant, and profile. The backend handles a stale organization slug when the token exposes exactly one organization.
 - Multiple accessible Sentry organizations: reconnect with an explicit organization instead of guessing.
 
