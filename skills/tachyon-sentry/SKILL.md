@@ -12,12 +12,12 @@ Use the local `tachyon` CLI for Sentry issue operations.
 - Use `tachyon ops sentry issues ...`; do not bypass Tachyon with direct Sentry API calls.
 - Pass an explicit `--tenant-id` and `--profile` when known. Do not assume the active profile has the correct tenant.
 - Add `--platform-id` only when the tenant is reached through a parent platform rather than direct membership. A tenant you belong to directly needs no platform scope, and there may be no platform ID to supply; the ops tenant that holds the Sentry write token is always in the parent-platform position, so mutations normally do need it.
-- Address an issue by the numeric Sentry issue `id`. CLI 0.6.68 and later against a Tachyon API that supports it also accept the human-readable short ID (for example `MYPROJECT-1A2`); older versions reject it with a 404.
+- Address an issue by the numeric Sentry issue `id`. CLI 0.6.69 and later against a Tachyon API that supports it also accept the human-readable short ID (for example `MYPROJECT-1A2`); older versions reject it with a 404.
 - Add `--json` so results can be parsed and summarized accurately.
 - Treat access tokens, auth headers, secret references, DSNs, and credential refresh output as secrets. Never echo them.
 - Default to read-only `list` and `view` operations.
 - Run `resolve`, `unresolve`, `archive`, `assign`, or `unassign` only when the user explicitly requests the mutation and the issue ID is unambiguous. For assignment, require the exact Sentry user ID, username, or email.
-- `archive` (Sentry's `ignored` state), `unresolve` (alias `reopen`), and `unassign` need CLI 0.6.68 or later. On an older CLI, tell the user to run `tachyon self-update` rather than falling back to the Sentry API.
+- `archive` (Sentry's `ignored` state), `unresolve` (alias `reopen`), and `unassign` need CLI 0.6.69 or later. On an older CLI, tell the user to run `tachyon self-update` rather than falling back to the Sentry API.
 - Scope a failing mutation correctly with `--platform-id`; never swap in another tenant's credentials, a host token, or a direct Sentry API call to get around the failure.
 
 ## Orientation
