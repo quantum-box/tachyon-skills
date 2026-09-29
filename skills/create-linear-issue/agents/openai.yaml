@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Linear Issue"
+  short_description: "Create Linear issues via Tachyon CLI"
+  default_prompt: "Use $create-linear-issue to create a Linear issue with tachyon issue create."

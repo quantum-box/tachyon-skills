@@ -1,18 +1,18 @@
 {
   "name": "tachyon",
-  "version": "0.1.1",
-  "description": "Tachyon agent workflows for remote browser control, Tachyon CLI operations, Storage integration, Linear issue management, Sentry issue operations, and Slack notification checks.",
+  "version": "0.2.0",
+  "description": "Tachyon operational workflows plus repository-scoped developer skills for quantum-box/tachyon-apps.",
   "author": {
     "name": "Quantum Box"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Tachyon",
-    "shortDescription": "Use Tachyon browser, CLI, Storage, Linear, Sentry, and Slack.",
-    "longDescription": "Use Tachyon workflows for the private k3s Cloudflare Mesh CDP browser gateway, Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, and Slack notification verification through the Tachyon CLI.",
+    "shortDescription": "Use Tachyon tools and tachyon-apps repo workflows.",
+    "longDescription": "Use Tachyon workflows for the private k3s Cloudflare Mesh CDP browser gateway, Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, and Slack notifications. Repository-specific development skills apply only in quantum-box/tachyon-apps.",
     "developerName": "Quantum Box",
     "category": "Developer Tools",
     "capabilities": [],
-    "defaultPrompt": "Use the Tachyon skills to control the remote browser, inspect Tachyon Cloud App state, integrate file storage, manage Linear or Sentry issues, or verify Slack notifications."
+    "defaultPrompt": "Use the Tachyon skills for browser, CLI, Storage, Linear, Sentry, or Slack workflows. Use tachyon-apps-development only when working in quantum-box/tachyon-apps."
   }
 }
