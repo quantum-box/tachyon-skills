@@ -1,6 +1,6 @@
 # Tachyon Skills
 
-Codex and Claude Code plugin for Tachyon agent workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, and Slack notification checks.
+Codex and Claude Code plugin for Tachyon workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notification checks, and repository-scoped developer workflows for `quantum-box/tachyon-apps`.
 
 Split out from the private [`quantum-box/agent-packages`](https://github.com/quantum-box/agent-packages) repository's `plugins/tachyon` so it can be distributed publicly without requiring organization credentials.
 
@@ -13,11 +13,17 @@ Split out from the private [`quantum-box/agent-packages`](https://github.com/qua
 - `tachyon-sentry`: inspect and manage Sentry issues through Tachyon's tenant-scoped operations API.
 - `tachyon-slack-notify`: verify and send Slack notifications through the Tachyon CLI, collect thread replies, and react to them.
 
+### Tachyon apps repository development
+
+- `tachyon-apps-development` loads the repository rules and routes to the matching specialized skill. Use this entrypoint only in `quantum-box/tachyon-apps`.
+- The plugin includes the repository's Codex development, taskdoc, architecture, implementation, testing, CI, and PR workflows under their existing skill names. Each repo-specific skill is scoped to `quantum-box/tachyon-apps`.
+- The repository's `tachyon-slack-notify` variant contains only workspace-specific tenant IDs; the plugin keeps its existing generic discovery workflow instead.
+
 ## Requirements
 
 - The [Tachyon CLI](https://github.com/quantum-box/tachyon-sdk) installed and on `PATH`.
 - A Tachyon auth profile. If you have not logged in yet, see the "Initial Setup" section of the `tachyon-cli` skill (`tachyon auth login`).
-- Access to your own Tachyon tenant(s) — this plugin does not ship any tenant IDs or credentials.
+- Access to your own Tachyon tenant(s). This plugin does not ship credentials; repo-specific examples use placeholders and local lookup instructions.
 
 ## Install
 

@@ -1,7 +1,7 @@
 {
   "name": "tachyon",
-  "description": "Tachyon agent workflows for remote browser control, Tachyon CLI operations, Storage integration, Linear issue management, Sentry issue operations, and Slack notification checks.",
-  "version": "0.1.1",
+  "description": "Tachyon operational workflows plus repository-scoped developer skills for quantum-box/tachyon-apps.",
+  "version": "0.2.0",
   "author": {
     "name": "Quantum Box"
   },
