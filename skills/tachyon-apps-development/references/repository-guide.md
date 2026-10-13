@@ -30,6 +30,13 @@
 - PR Ready準備、対象componentの最低patch version bump、taskdoc archiveは `task-pr-ready` を使う。すべての実装PRで少なくともpatch versionを上げる。merge後のchangelog、release notes、tag、post-merge docsは `task-complete` を使う。
 - `in-progress` taskdocが溜まったら `taskdoc-audit` を使い、実作業中でないものを `todo` / `backlog` / `completed` へ戻す。
 
+## 横断コード規約
+
+- usecaseのInputDataは外部入力をValue Object / enumで受け取り、生の `String` で受けない（[ADR-0147](https://github.com/quantum-box/tachyon-apps/blob/main/docs/src/architecture/decisions/ADR-0147-usecase-input-value-objects.md)、PLT-5828）。検証規則のない自由文やIDは `String` のままでよい。
+- 単一fieldの検証（長さ・形式・列挙値・数値範囲）はVOに置き、境界で変換する。RESTは `errors::axum::ValidatedJson`、MCPは `param_vo` / `param_vo_opt`、GraphQLはresolverでVOへparseする。usecaseに `validate_*` や入力文字列の `match` を作らず、handlerでVOを `String` へ戻して渡さない。
+- `aip_contract` などのcontract crateは文字列型のまま保つ。handlerがそのfieldをVOへparseしてからusecaseへ渡す。
+- 詳細は `development-process` / `implement-usecase` を参照する。
+
 ## ドキュメント配置
 
 - 基本コマンド、細かいコード規約、テスト手順、ローカルURL、開発用ヘッダーなどは `development-process` スキルに置く。

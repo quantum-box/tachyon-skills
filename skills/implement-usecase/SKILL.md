@@ -35,8 +35,11 @@ use usecase::{Executor, MultiTenancy, UsecaseInputData};
 pub struct {Usecase}InputData<'a> {
     pub executor: &'a Executor,
     pub multi_tenancy: &'a MultiTenancy,
-    pub field1: String,
-    pub field2: Option<String>,
+    /// External input with a format rule: take the value object / enum.
+    pub name: ProjectName,
+    pub visibility: Option<Visibility>,
+    /// Free text or opaque IDs without a rule may stay `String`.
+    pub description: Option<String>,
 }
 
 impl UsecaseInputData for {Usecase}InputData<'_> {
@@ -48,6 +51,28 @@ impl UsecaseInputData for {Usecase}InputData<'_> {
     }
 }
 ```
+
+### Input value objects ([ADR-0147](https://github.com/quantum-box/tachyon-apps/blob/main/docs/src/architecture/decisions/ADR-0147-usecase-input-value-objects.md))
+
+- Single-field rules (length, format, allowed values, numeric range) live in
+  the value object, not in the usecase. Define string VOs with
+  `value_object::validated_string_value_object!` (see its rustdoc) and enums
+  with `FromStr` + serde + `utoipa::ToSchema`.
+- Do not add `fn validate_*` helpers or `match input.as_deref() { Some("..") }`
+  parsing to usecases. Keep only cross-field, collection, and external-state
+  checks there.
+- The boundary builds the value: REST DTO fields are VOs extracted with
+  `errors::axum::ValidatedJson`, MCP args use `param_vo` / `param_vo_opt`,
+  GraphQL resolvers parse with `.parse::<Vo>()?`. `param_vo` /
+  `param_vo_opt` read JSON strings only (a non-string value is
+  `invalid_params`); for a numeric VO, read the number and call its
+  `try_new`.
+- A numeric VO placed in a REST DTO must validate in `Deserialize`
+  (`#[serde(try_from = "u32")]` with `TryFrom` calling `try_new`). A derived
+  `Deserialize` on the tuple field skips the range rule; until a VO has one,
+  keep the DTO field primitive and call `try_new` in the handler.
+- Contract crates such as `aip_contract` stay string-typed. The handler parses
+  their fields into VOs before building the usecase input.
 
 ## InputPort Trait Implementation
 
@@ -124,6 +149,7 @@ pub struct {Usecase}OutputData {
 4. **Policy check first**: Always call `self.policy_check()` at the beginning
 5. **Readability**: Avoid unnecessary `map_err` - `errors::Result` propagates automatically
 6. **Tracing**: Always add `#[tracing::instrument]`
+7. **Value object input**: External input with a rule arrives as a VO/enum; no single-field validation in the usecase (ADR-0147)
 7. **Usecase policy manifest**: External usecases that perform policy checks must have `#[usecase(read)]`, `#[usecase(write)]`, or `#[usecase(admin)]`.
    - Default action is `{context}:{StructName}`.
    - `context` is inferred from the crate/package name.
