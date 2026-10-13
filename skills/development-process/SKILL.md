@@ -187,6 +187,16 @@ the local checkout instead of copying environment-specific IDs into the plugin.
   not add a `Usecase` suffix.
 - Include `executor` and `multi_tenancy` in usecase input data and run
   `policy_check` at the start of authorized usecases.
+- Usecase input data takes external input as value objects or enums, not
+  `String` ([ADR-0147](https://github.com/quantum-box/tachyon-apps/blob/main/docs/src/architecture/decisions/ADR-0147-usecase-input-value-objects.md)). Put single-field rules in the value object
+  (`value_object::validated_string_value_object!`) and do not write
+  `validate_*` helpers or input-string `match`es in usecases. Usecases keep
+  only cross-field, collection, and external-state checks. Extract axum
+  bodies with `errors::axum::ValidatedJson`, parse MCP args with
+  `param_vo` / `param_vo_opt`, parse GraphQL args into VOs in the resolver,
+  and never turn a value object back into `String` before the usecase.
+  Contract crates such as `aip_contract` stay string-typed; handlers parse
+  their fields into VOs. Check these points in PR review.
 - Add auth actions and policy mappings to
   `scripts/seeds/n1-seed/008-auth-policies.yaml` when introducing new actions.
 - Prefer `ok_or_else` when error construction is non-trivial.

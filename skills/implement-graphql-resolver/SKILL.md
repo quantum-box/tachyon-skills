@@ -76,13 +76,19 @@ impl {Context}Mutation {
         let multi_tenancy = ctx.data_unchecked::<usecase::MultiTenancy>();
         let app = ctx.data_unchecked::<Arc<crate::App>>();
 
+        // Parse string args into value objects at the boundary (ADR-0147).
+        let name = input
+            .name
+            .parse::<ProjectName>()
+            .map_err(|e| e.extend())?;
+
         let result = app
             .{usecase}()
             .execute(&usecase::{Usecase}InputData {
                 executor,
                 multi_tenancy,
-                field1: input.field1,
-                field2: input.field2,
+                name,
+                description: input.description,
             })
             .await
             .map_err(|e| e.extend())?;
@@ -151,3 +157,4 @@ match result {
 3. **Error extension**: Convert `errors::Error` with `.extend()`
 4. **Doc comments become GraphQL docs**: Use `///` comments
 5. **Schema is auto-generated**: Edit Rust code, then run `mise run codegen`
+6. **Parse into value objects**: Keep schema-compatible `String` args, parse them with `.parse::<Vo>()` in the resolver, and pass the VO to the usecase; never forward raw strings that have a VO (ADR-0147)

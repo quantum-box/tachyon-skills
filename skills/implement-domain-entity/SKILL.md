@@ -144,11 +144,54 @@ impl {Entity} {
 }
 ```
 
-## Enum Type
+## String Value Object From External Input
+
+Use `value_object::validated_string_value_object!` for values that arrive
+from requests (ADR-0147). `try_new`, `FromStr`, `TryFrom<String>` and serde
+`Deserialize` share one rule; no `From<String>` is generated. `new` skips
+validation and is only for restoring persisted rows and tests.
 
 ```rust
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+value_object::validated_string_value_object!(
+    /// Display name of a project.
+    ProjectName, max_chars = 255
+);
+
+fn validate_slug(value: &str) -> errors::Result<()> {
+    value_object::ensure_max_chars("Slug", value, 63)?;
+    if !value.is_empty()
+        && value.chars().all(|c| c.is_ascii_lowercase() || c == '-')
+    {
+        Ok(())
+    } else {
+        Err(errors::Error::bad_request("Slug must be a lowercase slug"))
+    }
+}
+
+value_object::validated_string_value_object!(
+    /// URL-safe identifier.
+    Slug, validate = validate_slug
+);
+```
+
+## Enum Type
+
+serde `Deserialize` (REST) and `FromStr` (MCP) must accept the same spellings.
+Keep `FromStr` exact, matching `rename_all`; if an existing endpoint accepted
+other spellings, list each of them with `#[serde(alias = "...")]` and in
+`FromStr`. GraphQL is separate: async-graphql names enum values
+`SCREAMING_SNAKE_CASE` and parses them itself. For a new enum, set
+`#[graphql(rename_items = "snake_case")]` to match; do not change the spelling
+of an enum an existing schema already exposes.
+
+```rust
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq,
+    serde::Serialize, serde::Deserialize, utoipa::ToSchema,
+)]
+#[serde(rename_all = "snake_case")]
 #[cfg_attr(feature = "async-graphql", derive(async_graphql::Enum))]
+#[cfg_attr(feature = "async-graphql", graphql(rename_items = "snake_case"))]
 pub enum {Entity}Status {
     Active,
     Inactive,
@@ -160,12 +203,12 @@ impl FromStr for {Entity}Status {
     type Err = errors::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
+        match s {
             "active" => Ok(Self::Active),
             "inactive" => Ok(Self::Inactive),
             "pending" => Ok(Self::Pending),
             "archived" => Ok(Self::Archived),
-            _ => Err(errors::Error::type_error(format!("Invalid status: {}", s))),
+            _ => Err(errors::Error::bad_request(format!("Invalid status: {}", s))),
         }
     }
 }
@@ -188,5 +231,6 @@ pub use {entity}_repository::{Entity}Repository;
 3. **Immutable design**: `update()` returns new instance
 4. **restore for DB recovery**: Complete restoration with ID
 5. **new for creation**: Auto-generate ID and timestamps
-6. **FromStr implementation**: Support string parsing
+6. **FromStr implementation**: Support string parsing; return `bad_request` so boundaries answer 400
 7. **Business logic in entity**: Encode domain rules as methods
+8. **Validated input VOs**: Values from external input use `validated_string_value_object!` or an enum; usecases receive them as-is (ADR-0147)

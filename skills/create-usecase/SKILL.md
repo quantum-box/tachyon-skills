@@ -28,8 +28,11 @@ use errors::Result;
 pub struct InputData<'a> {
     pub executor: Executor,
     pub multi_tenancy: MultiTenancy,
-    // Add fields here
-    pub name: &'a str,
+    // Add fields here. External input with a format rule takes a value
+    // object / enum parsed at the boundary, not a raw string (ADR-0147).
+    pub name: &'a ProjectName,
+    // Free text or opaque IDs without a rule may stay string-typed.
+    pub description: Option<&'a str>,
 }
 
 impl UsecaseInputData for InputData<'_> {

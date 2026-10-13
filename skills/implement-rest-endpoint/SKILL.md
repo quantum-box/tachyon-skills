@@ -56,7 +56,7 @@ pub fn create_router_with_deps(
     request_body = {Request}Request,
     responses(
         (status = 201, description = "Created successfully", body = {Response}Response),
-        (status = 400, description = "Bad request"),
+        (status = 400, description = "Bad request", body = errors::axum::ErrorResponse),
         (status = 401, description = "Unauthorized"),
         (status = 403, description = "Forbidden"),
     ),
@@ -68,14 +68,14 @@ pub async fn create(
     executor: Executor,
     multi_tenancy: MultiTenancy,
     Extension(usecase): Extension<Arc<{Usecase}>>,
-    Json(request): Json<{Request}Request>,
+    ValidatedJson(request): ValidatedJson<{Request}Request>,
 ) -> Result<(StatusCode, Json<{Response}Response>)> {
     let operator_id = resolve_tenant_id(&executor, &multi_tenancy)?;
 
     let result = usecase
         .execute({Usecase}InputData {
-            field1: request.field1,
-            field2: request.field2,
+            name: request.name,
+            description: request.description,
         })
         .await?;
 
@@ -88,7 +88,10 @@ pub async fn create(
 ```rust
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct CreateRequest {
-    pub name: String,
+    /// Value object: deserialization runs its rule, so invalid input is
+    /// a 400 before the handler body runs.
+    #[schema(inline)]
+    pub name: ProjectName,
     pub description: Option<String>,
     #[serde(default)]
     pub metadata: HashMap<String, String>,
@@ -131,3 +134,5 @@ impl From<DomainEntity> for EntityResponse {
 3. **Errors auto-convert**: `errors::Error` implements `IntoResponse`
 4. **Explicit StatusCode**: POST=201, GET=200, DELETE=204
 5. **OpenAPI annotations**: Use `#[utoipa::path]` macro
+6. **Body extraction**: Use `errors::axum::ValidatedJson<T>`, not `axum::Json<T>`, so deserialize/VO failures return the common 400 `ErrorResponse` instead of axum's 422 text. (ADR-0147). Exception: externally specified APIs (e.g. OpenAI-compatible) that must keep their own error format
+7. **Pass value objects through**: Do not call `.into_inner()` on a VO to hand a `String` to the usecase; the usecase input takes the VO
