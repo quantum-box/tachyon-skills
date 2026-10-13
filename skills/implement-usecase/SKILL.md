@@ -150,12 +150,12 @@ pub struct {Usecase}OutputData {
 5. **Readability**: Avoid unnecessary `map_err` - `errors::Result` propagates automatically
 6. **Tracing**: Always add `#[tracing::instrument]`
 7. **Usecase policy manifest**: External usecases that perform policy checks must have `#[usecase(read)]`, `#[usecase(write)]`, or `#[usecase(admin)]`.
-8. **Value object input**: External input with a rule arrives as a VO/enum; no single-field validation in the usecase (ADR-0147)
    - Default action is `{context}:{StructName}`.
    - `context` is inferred from the crate/package name.
    - Use `#[usecase(write, action = "auth:UpdatePolicy")]` only for existing compatibility exceptions.
    - Do not add `kind` or `internal`; internal application helpers should stay private methods/services and are not manifest entries.
    - After adding or changing annotations, run `mise run usecase-policy-prepare` and `mise run usecase-policy-check`.
+8. **Value object input**: External input with a rule arrives as a VO/enum; no single-field validation in the usecase (ADR-0147)
 
 ## mod.rs Export
 
