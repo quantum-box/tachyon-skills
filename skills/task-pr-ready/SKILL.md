@@ -84,12 +84,14 @@ evidence", not necessarily "merged to main".
      component version.
 
 3. Archive taskdocs.
+   - Before moving, search the repository for references to each old taskdoc
+     path and record the inbound links.
    - Move each completed task directory to
      `docs/src/tasks/completed/v<pr-version>/<slug>/`.
-   - Before moving, search the repository for references to the old taskdoc path.
-     Update inbound links in related DDs, overview docs, and other documents to
-     the completed path, then verify that the updated links resolve.
+   - Update inbound links in related DDs, overview docs, and other documents to
+     the completed path.
    - Update internal links inside moved taskdocs when needed.
+   - Verify the updated links resolve and no references to the old path remain.
    - Keep taskdocs discoverable through a related DD or overview doc when
      needed; do not maintain a separate global index.
 
