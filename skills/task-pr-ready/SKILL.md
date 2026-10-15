@@ -87,7 +87,8 @@ evidence", not necessarily "merged to main".
    - Move each completed task directory to
      `docs/src/tasks/completed/v<pr-version>/<slug>/`.
    - Update internal links inside moved taskdocs when needed.
-   - Update `docs/SUMMARY.md` so links point at the completed location.
+   - Keep taskdocs discoverable through a related DD or overview doc when
+     needed; do not maintain a separate global index.
 
 4. Prepare PR evidence.
    - Ensure durable docs are updated when the behavior should outlive the

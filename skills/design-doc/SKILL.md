@@ -68,7 +68,8 @@ when a full DD is needed. Keep task-local DDs concise.
 4. Link everything.
    - Link the DD from `task.md`.
    - Link related ADRs from the DD.
-   - Update `docs/SUMMARY.md` when the DD is durable or reader-facing.
+   - Link durable or reader-facing DDs from the relevant service, product, or
+     architecture overview doc.
 
 ## Writing Style（DDは人間が読むための文書）
 

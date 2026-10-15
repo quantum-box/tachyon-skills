@@ -4,7 +4,7 @@ description: >-
   Applies only to work in the quantum-box/tachyon-apps repository.
   Audit Tachyon taskdoc lifecycle health. Use proactively when: (1) in-progress taskdocs are
   piling up, (2) before creating a new taskdoc while WIP is high, (3) the user asks to clean up
-  taskdocs, or (4) docs/SUMMARY.md may be stale.
+  taskdocs, or (4) taskdoc lifecycle or cross-reference cleanup is needed.
 ---
 
 # Taskdoc Audit
@@ -33,10 +33,10 @@ reviewable cleanup batches.
    fi
    ```
 
-2. Compare filesystem and `docs/SUMMARY.md`.
-   - Find taskdocs missing from the summary.
-   - Find summary links that point to missing taskdocs.
-   - Find duplicate summary links.
+2. Check taskdoc paths and cross-references.
+   - Find taskdocs whose links point to missing files.
+   - Find duplicate slugs or Linear IDs across lifecycle buckets.
+   - Inspect links in the affected docs rather than maintaining a separate index.
 
 3. Classify `in-progress` taskdocs.
    - **Active**: current branch/diff/PR clearly references the task.
@@ -66,7 +66,7 @@ reviewable cleanup batches.
 Report:
 
 - lifecycle counts
-- summary drift
+- broken or stale cross-reference links
 - duplicate links or duplicate slugs
 - active taskdocs
 - archive candidates
