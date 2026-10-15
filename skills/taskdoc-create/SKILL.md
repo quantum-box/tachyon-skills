@@ -70,8 +70,10 @@ Skip a taskdoc for:
    - Completion criteria
    - Risks and deferred work
 
-6. Update navigation.
-   - Use `update-docs-summary` when the taskdoc should be discoverable.
+6. Keep taskdocs discoverable through their context.
+   - Link the taskdoc from its related DD or overview doc when readers need
+     it.
+   - Avoid maintaining a separate global index of taskdocs.
 
 ## Writing Style（本文は人間が読むための文書）
 

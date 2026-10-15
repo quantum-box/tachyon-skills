@@ -66,7 +66,7 @@ tags, and GitHub Releases.
      - Tachyon Apps feature docs: `docs/src/tachyon-apps/<category>/<feature>.md`
      - Developer docs: `docs/src/for-developers/<guide>.md`
      - Architecture docs: `docs/src/architecture/<component>.md`
-   - Link the spec from the relevant overview doc and `docs/SUMMARY.md`.
+   - Link the spec from the relevant overview doc.
    - Determine the merged version from the relevant package/app metadata.
    - Propose the release tag before editing.
    - Update changelog/release notes, create the tag, push the tag, and create or

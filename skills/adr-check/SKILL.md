@@ -81,7 +81,7 @@ Proposed or Accepted (YYYY-MM-DD)
 3. Allocate the next ADR number from local plus `origin/main`.
 4. Write the ADR without secrets or environment-specific credential values.
 5. Link the ADR from the related taskdoc and DD.
-6. Update `docs/SUMMARY.md` if the ADR should be reader-facing.
+6. Link a reader-facing ADR from the relevant architecture overview doc.
 
 ## Output
 
