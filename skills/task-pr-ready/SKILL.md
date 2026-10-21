@@ -46,18 +46,12 @@ evidence", not necessarily "merged to main".
 
 ## Stack PRs
 
-- Decide stack placement before implementation starts, then verify it again
-  before publishing the PR. Treat a task as dependent when its Linear issue is
-  marked `blocked by` a preceding issue or its implementation requires a
-  preceding PR's changes.
-- If the dependent task's preceding PR is still open, keep one task per PR,
-  branch from the preceding PR's head, and set the new PR's base to the
-  preceding branch.
-- If the preceding PR has merged before the next task starts, use the updated
-  `main` as the base.
-- When a lower PR merges after child PRs exist, verify GitHub's retarget/rebase
-  result before continuing the stack. Merge bottom-up or use GitHub's atomic
-  merge for the full stack.
+Use `stack-pr` before editing or publishing a dependent layer. It owns branch
+placement, safe gh-stack commands, rebase/merge recovery, and per-layer evidence.
+For stacked implementation PRs, compare the component version with both
+`origin/main` and the immediate parent branch. Introduce a separate bump above
+the inherited version and archive under this layer's version. Recheck versions
+and archive paths after parent changes.
 
 ## Workflow
 
@@ -104,7 +98,9 @@ evidence", not necessarily "merged to main".
      selected bump level.
 
 5. Publish.
-   - Prefer the GitHub connector for PR create/update when available.
+   - For gh-stack-managed stacks, follow `stack-pr` and publish with
+     `gh stack submit --auto --open`; verify bases and Ready state afterwards.
+   - For ordinary PRs or manual stacks, prefer the GitHub connector for PR create/update when available.
    - Fall back to `gh pr create` or `gh pr edit` only when connector tools are
      unavailable and local auth is appropriate.
    - Verify the final PR is open, Ready, and targets the expected base branch.

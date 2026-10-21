@@ -19,6 +19,8 @@
 
 ## スキルルーティング
 
+- 依存する複数PR、既存stackの修正・公開・mergeは、実装前に `stack-pr` を使う。利用可能なら `gh-stack` も読み、各層の所有範囲・base・Ready公開・下位変更後のrebaseを確認する。
+
 - 非自明な開発を始める前に `development-process` を使い、標準フロー、基本コマンド、品質チェック、コード規約、taskdoc/DD/ADR運用を確認する。
 - 現状把握が必要なら `project-status`、ドメイン文脈が必要なら `context-loader`、既存実装パターン確認は `explore` / `find-pattern` を使う。
 - そこそこの規模の実装では `taskdoc-create` を使う。taskdocは実行ログと検証エビデンスであり、設計判断の置き場ではない。

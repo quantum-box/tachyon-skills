@@ -1,6 +1,6 @@
 {
   "name": "tachyon",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Tachyon operational workflows plus repository-scoped developer skills for quantum-box/tachyon-apps.",
   "author": {
     "name": "Quantum Box"

@@ -15,6 +15,8 @@ Split out from the private [`quantum-box/agent-packages`](https://github.com/qua
 
 ### Tachyon apps repository development
 
+- `stack-pr` plans and maintains dependent PR layers, Ready publication, and parent-change recovery. It uses `gh-stack` when available and preserves manual branch/base chains otherwise.
+
 - `tachyon-apps-development` loads the repository rules and routes to the matching specialized skill. Use this entrypoint only in `quantum-box/tachyon-apps`.
 - The plugin includes the repository's Codex development, taskdoc, architecture, implementation, testing, CI, and PR workflows under their existing skill names. Each repo-specific skill is scoped to `quantum-box/tachyon-apps`.
 - The repository's `tachyon-slack-notify` variant contains only workspace-specific tenant IDs; the plugin keeps its existing generic discovery workflow instead.
