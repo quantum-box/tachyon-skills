@@ -40,6 +40,8 @@ specific change, create or update a DD with `design-doc`.
    - Run `project-status` when the current branch or task state is unclear.
    - Search related taskdocs, DDs, ADRs, and Linear references before starting.
    - Use `context-loader` for domain-specific work.
+   - Before editing dependent multi-part work or an existing stack, use
+     `stack-pr` to choose the owning layer and parent branch.
 
 2. **Decide task tracking**
    - Use `taskdoc-create` for non-trivial work.
@@ -80,7 +82,7 @@ specific change, create or update a DD with `design-doc`.
      `final-quality-gate`) only before PR/merge or when risk justifies it.
 
 6. **Prepare Ready PR**
-   - Use `task-pr-ready`.
+   - Use `task-pr-ready`; for stacked delivery also use `stack-pr`.
    - Fetch `origin/main`, confirm the target component version on `origin/main`,
      bump the target component by at least one patch version in every
      implementation PR, archive taskdocs to
