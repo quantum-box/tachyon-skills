@@ -1,0 +1,4 @@
+interface:
+  display_name: "Incident Report"
+  short_description: "Draft clear incident reports with technical evidence"
+  default_prompt: "Use $incident-report to create or revise an incident report with a plain-language overview and concise technical details at the end."
