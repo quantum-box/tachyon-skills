@@ -73,7 +73,11 @@ specific change, create or update a DD with `design-doc`.
      virtualization overhead is not justified for ordinary validation.
    - Use `docker-ci*` only when the user explicitly requests it, CI parity
      depends on the container image, or the failure is suspected to be
-     Docker-specific. Otherwise leave full integration coverage to PR CI.
+     Docker-specific.
+   - Do not watch, wait for, or dispatch GitHub Actions CI. PRs run no CI; the
+     hourly batch on `main` runs full CI and deploys.
+   - Before finishing, run `mise run ci` once on the host. When it passes, the
+     work is done.
    - For UI/user-flow changes, use `browser-test` or `playwright-cli`; API-only
      verification is not enough for UI changes.
    - Use real sign-in paths for browser verification unless the user explicitly
@@ -115,7 +119,7 @@ Run commands from the repository root.
 | Build | `mise run build` or `pnpm run build` | Turbo build. |
 | Rust check | `mise run check` | Default lightweight Rust check. |
 | Rust format | `mise run fmt` | Use before PR when Rust changed. |
-| Full CI | `mise run ci` | Host execution; prefer changed-surface checks when practical. |
+| Full CI | `mise run ci` | Host execution; run once before finishing. Use changed-surface checks while working. |
 | Rust CI | `mise run ci-rust` | Host execution; use only when broad Rust validation is justified. |
 | Node lint | `pnpm exec turbo run lint --filter=<pkg>` | Run for changed package. |
 | Node types | `pnpm exec turbo run ts --filter=<pkg>` | Run for changed package. |
