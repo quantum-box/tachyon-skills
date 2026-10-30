@@ -74,8 +74,10 @@ specific change, create or update a DD with `design-doc`.
    - Use `docker-ci*` only when the user explicitly requests it, CI parity
      depends on the container image, or the failure is suspected to be
      Docker-specific.
-   - Do not watch, wait for, or dispatch GitHub Actions CI. PRs run no CI; the
-     hourly batch on `main` runs full CI and deploys.
+   - Check and wait for GitHub Actions CI when the user requests it or when
+     its result is needed to complete the requested release or deployment.
+     PRs run no CI; the hourly batch on `main` runs full CI and deploys.
+     Start CI only when authorized by the user or the applicable release process.
    - Before finishing, run `mise run ci` once on the host. When it passes, the
      work is done.
    - For UI/user-flow changes, use `browser-test` or `playwright-cli`; API-only
