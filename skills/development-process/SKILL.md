@@ -78,6 +78,10 @@ specific change, create or update a DD with `design-doc`.
      hourly batch on `main` runs full CI and deploys.
    - Before finishing, run `mise run ci` once on the host. When it passes, the
      work is done.
+   - Python scripts under `scripts/ci` (e.g. `image-build-inputs.py`,
+     `aip-root-build-comparison.py`) import `tomllib` and need Python 3.11+.
+     The macOS system `python3` (3.9) fails them; put a newer Python first on
+     `PATH` before running their tests.
    - For UI/user-flow changes, use `browser-test` or `playwright-cli`; API-only
      verification is not enough for UI changes.
    - Use real sign-in paths for browser verification unless the user explicitly
