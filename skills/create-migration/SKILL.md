@@ -204,22 +204,32 @@ TiDB v8.5.0+で外部キーがGA。CASCADE DELETE/UPDATEをサポート。ただ
 ### ファイル命名
 
 ```
-packages/{context}/migrations/YYYYMMDDhhmmss_description.up.sql
-packages/{context}/migrations/YYYYMMDDhhmmss_description.down.sql
+<context の crate ディレクトリ>/migrations/YYYYMMDDhhmmss_description.up.sql
+<context の crate ディレクトリ>/migrations/YYYYMMDDhhmmss_description.down.sql
 ```
 
 - **タイムスタンプ**: 14桁（`YYYYMMDDhhmmss`）
 - **スネークケース**: `create_xxx`, `add_xxx_to_yyy`, `drop_xxx`, `rename_xxx`
 - **UP/DOWNペア**: 必ず両方作成する
-- **パッケージ別ディレクトリ**: `platform/aip/gateway/migrations/`, `packages/auth/migrations/`, `packages/payment/migrations/`
+- **context 別ディレクトリ**: bounded context ごとに自分の `migrations/` と DB を持つ。他 context の DB に表を足さない
 
 ### マイグレーション配置先
 
-| コンテキスト | ディレクトリ |
-|------------|------------|
-| LLMs/Agent | `platform/aip/gateway/migrations/` |
-| Auth | `packages/auth/migrations/` |
-| Payment | `packages/payment/migrations/` |
+| コンテキスト | ディレクトリ | DB |
+|------------|------------|----|
+| LLMs/Agent | `platform/aip/gateway/migrations/` | `tachyon_apps_llms` |
+| AIP Token Management | `platform/aip/token-management/migrations/` | `tachyon_apps_token_management` |
+| Data | `platform/data/core/migrations/` / `platform/data/semantic/migrations/` | `tachyon_apps_data` / `tachyon_apps_data_semantic` |
+| Auth | `packages/auth/migrations/` | `tachyon_apps_auth` |
+| Payment | `packages/payment/migrations/` | `tachyon_apps_payment` |
+
+上の表は一部。実際の一覧は `mise.toml` の `[tasks.migrate]` にある `run_migration <dir> <db>` の行が正。
+
+新しい DB を作るときは、次をすべて同じ PR で登録する。
+- `scripts/init/init.sql` と `mise.toml` のローカル用 task（`docker-sqlx-migrate` / `docker-migrate` / `sqlx-migrate-all`）
+- 本番の `[tasks.migrate]` の `run_migration` 行
+- `scripts/ci/migration-release-gate.mjs` の対象一覧
+- `scripts/ci/tidb-migration-required-gate.mjs`（検証前は `TIDB_PENDING_MIGRATION_CONTEXTS` に一時的に入れ、検証後に外す）
 
 ### CREATE TABLE テンプレート
 
