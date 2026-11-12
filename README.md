@@ -1,6 +1,6 @@
 # Tachyon Skills
 
-Codex and Claude Code plugin for Tachyon workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notification checks, incident reporting, and repository-scoped developer workflows for `quantum-box/tachyon-apps`.
+Codex and Claude Code plugin for Tachyon workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notification checks, and incident reporting.
 
 Split out from the private [`quantum-box/agent-packages`](https://github.com/quantum-box/agent-packages) repository's `plugins/tachyon` so it can be distributed publicly without requiring organization credentials.
 
@@ -14,13 +14,7 @@ Split out from the private [`quantum-box/agent-packages`](https://github.com/qua
 - `tachyon-slack-notify`: verify and send Slack notifications through the Tachyon CLI, collect thread replies, and react to them.
 - `incident-report`: create or revise incident and vulnerability reports with a plain-language explanation first and concise technical evidence at the end; applies across products and repositories.
 
-### Tachyon apps repository development
-
-- `stack-pr` plans and maintains dependent PR layers, Ready publication, and parent-change recovery. It uses `gh-stack` when available and preserves manual branch/base chains otherwise.
-
-- `tachyon-apps-development` loads the repository rules and routes to the matching specialized skill. Use this entrypoint only in `quantum-box/tachyon-apps`.
-- The plugin includes the repository's Codex development, taskdoc, architecture, implementation, testing, CI, and PR workflows under their existing skill names. Each repo-specific skill is scoped to `quantum-box/tachyon-apps`.
-- The repository's `tachyon-slack-notify` variant contains only workspace-specific tenant IDs; the plugin keeps its existing generic discovery workflow instead.
+Development skills for the `quantum-box/tachyon-apps` repository (taskdocs, design docs, implementation patterns, PR workflows) live in that repository's `.claude/skills/` and are not part of this plugin.
 
 ## Requirements
 
