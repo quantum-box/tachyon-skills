@@ -21,7 +21,7 @@ Since tachyon-api 0.92.114 and CLI 0.6.28 (PLT-3087), the loop closes in both di
 tachyon --version
 ```
 
-Expect `tachyon 0.5.3` or newer for nested `--tenant-id` support, and `0.6.28` or newer for `--thread-key` and `ops slack react`. If older, ask whether to update, or run the repo's release/update workflow if the user explicitly requested it.
+If `tachyon ops notify send --help` does not list `--thread-key` and `--mention`, or `ops notify react` is missing, ask whether to run `tachyon self-update`.
 
 2. List accessible operators when possible:
 
@@ -37,7 +37,15 @@ If this fails after switching to a forbidden tenant, recover by switching back t
 tachyon ops slack send --tenant-id <tenant_id_or_alias> --text "Codex test notification from tachyon CLI" --json
 ```
 
-`ops slack` is an alias for `ops notify`. Both should call `POST /v1/chat/send`.
+`ops slack` is an alias for `ops notify`. Both call `POST /v1/chat/send` and post to the tenant's configured notification destination.
+
+Add `--mention <who>` (repeatable) to mention a Slack user, a Team (display name, `@handle`, User Group ID `S...`, or raw `<!subteam^S...>` token), a broadcast, or a configured alias. Names and handles match exactly and case-insensitively; ambiguous or disabled Teams are rejected. List Slack users through the tenant's saved connection with:
+
+```bash
+tachyon ops notify users --tenant-id <tenant_id> --json
+```
+
+`tachyon slack send --integration <id> --channel <channel> --message <text>` is a different path: it posts an arbitrary message through a specific Slack integration and channel. Use `ops notify` for notifications, threads, and reactions.
 
 4. Report the exact API outcome:
 
@@ -48,7 +56,11 @@ tachyon ops slack send --tenant-id <tenant_id_or_alias> --text "Codex test notif
 
 ## Collecting Thread Replies (PLT-3042)
 
-CLI 0.6.28 supports `--thread-key`, so prefer the CLI. The API form is kept below because the CLI has no `replies` subcommand yet. The bearer token lives in `~/Library/Application Support/tachyon/credentials.json` (`access_token`); treat it as a secret.
+Prefer the CLI for sending (`--thread-key`). The CLI has no `replies` subcommand, so collecting replies uses the API. Get the bearer token from the CLI, which refreshes it when needed and only prints it to a pipe; never echo it:
+
+```bash
+TOKEN="$(tachyon auth token)"
+```
 
 1. Send a notification with a stable `thread_key`:
 

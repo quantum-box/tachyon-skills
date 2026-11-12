@@ -7,7 +7,7 @@ Split out from the private [`quantum-box/agent-packages`](https://github.com/qua
 ## Skills
 
 - `tachyon-browser`: use the Tachyon k3s Cloudflare Mesh remote Chromium CDP gateway with agent-browser, Playwright, Codex, or Claude Code.
-- `tachyon-cli`: inspect Tachyon Cloud Apps, builds, deployments, build logs, auth profiles, and live build status.
+- `tachyon-cli`: set up auth profiles and inspect Tachyon Cloud Apps, builds, build and runtime logs, and live build status. For `tachyon.yml`, env vars, and deploys, install the CLI's bundled skill with `tachyon skills install tachyon-cloud`.
 - `tachyon-storage`: integrate file uploads, reads, and deletion through Tachyon Storage; migrate direct R2 access and diagnose storage failures.
 - `tachyon-linear`: manage Linear issues through Tachyon's project-management integration.
 - `tachyon-sentry`: inspect and manage Sentry issues through Tachyon's tenant-scoped operations API.
