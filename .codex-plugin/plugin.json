@@ -1,6 +1,6 @@
 {
   "name": "tachyon",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Tachyon operational workflows, incident reporting, and formal verification.",
   "author": {
     "name": "Quantum Box"
