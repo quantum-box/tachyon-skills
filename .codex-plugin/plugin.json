@@ -1,7 +1,7 @@
 {
   "name": "tachyon",
-  "version": "0.4.0",
-  "description": "Tachyon operational workflows and incident reporting.",
+  "version": "0.5.0",
+  "description": "Tachyon operational workflows, incident reporting, and formal verification.",
   "author": {
     "name": "Quantum Box"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Tachyon",
     "shortDescription": "Use Tachyon tools and operational workflows.",
-    "longDescription": "Use Tachyon workflows for the private k3s Cloudflare Mesh CDP browser gateway, Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notifications, and incident reports with plain-language summaries and technical evidence.",
+    "longDescription": "Use Tachyon workflows for the private k3s Cloudflare Mesh CDP browser gateway, Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notifications, incident reports with plain-language summaries and technical evidence, and formal verification of critical logic with Verus or TLA+.",
     "developerName": "Quantum Box",
     "category": "Developer Tools",
     "capabilities": [],

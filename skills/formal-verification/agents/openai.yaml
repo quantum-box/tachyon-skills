@@ -1,0 +1,4 @@
+interface:
+  display_name: "Formal Verification"
+  short_description: "Verify critical Tachyon logic with Verus or TLA+"
+  default_prompt: "Use $formal-verification to decide whether this change needs formal verification, then verify the production decision and register it in the repository's verification task and scheduled CI."
