@@ -1,6 +1,6 @@
 # Tachyon Skills
 
-Codex and Claude Code plugin for Tachyon workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notification checks, and incident reporting.
+Codex and Claude Code plugin for Tachyon workflows: remote browser control (k3s Cloudflare Mesh CDP gateway), Tachyon CLI Cloud App/build/log inspection, Storage integration, Linear issue management, Sentry issue operations, Slack notification checks, incident reporting, and formal verification of critical logic.
 
 Split out from the private [`quantum-box/agent-packages`](https://github.com/quantum-box/agent-packages) repository's `plugins/tachyon` so it can be distributed publicly without requiring organization credentials.
 
@@ -13,6 +13,7 @@ Split out from the private [`quantum-box/agent-packages`](https://github.com/qua
 - `tachyon-sentry`: inspect and manage Sentry issues through Tachyon's tenant-scoped operations API.
 - `tachyon-slack-notify`: verify and send Slack notifications through the Tachyon CLI, collect thread replies, and react to them.
 - `incident-report`: create or revise incident and vulnerability reports with a plain-language explanation first and concise technical evidence at the end; applies across products and repositories.
+- `formal-verification`: decide whether new or changed critical logic (authz, tenant binding, billing, ledgers, retries, state transitions) needs formal verification, verify the production decision with Verus or the ordering with TLA+, register it in the repository's pinned verification task and scheduled CI, and record proven properties and trusted boundaries.
 
 Development skills for the `quantum-box/tachyon-apps` repository (taskdocs, design docs, implementation patterns, PR workflows) live in that repository's `.claude/skills/` and are not part of this plugin.
 
@@ -38,7 +39,7 @@ For local development:
 claude --plugin-dir .
 ```
 
-This exposes `/tachyon:tachyon-browser`, `/tachyon:tachyon-cli`, `/tachyon:tachyon-storage`, `/tachyon:tachyon-linear`, `/tachyon:tachyon-sentry`, `/tachyon:tachyon-slack-notify`, and `/tachyon:incident-report`. It also adds `remote-browser` to the Bash PATH while enabled.
+This exposes `/tachyon:tachyon-browser`, `/tachyon:tachyon-cli`, `/tachyon:tachyon-storage`, `/tachyon:tachyon-linear`, `/tachyon:tachyon-sentry`, `/tachyon:tachyon-slack-notify`, `/tachyon:incident-report`, and `/tachyon:formal-verification`. It also adds `remote-browser` to the Bash PATH while enabled.
 
 ### Codex app
 
